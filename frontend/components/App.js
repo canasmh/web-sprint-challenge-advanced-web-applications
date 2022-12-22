@@ -5,6 +5,7 @@ import LoginForm from './LoginForm'
 import Message from './Message'
 import ArticleForm from './ArticleForm'
 import Spinner from './Spinner'
+import axios from 'axios'
 
 const articlesUrl = 'http://localhost:9000/api/articles'
 const loginUrl = 'http://localhost:9000/api/login'
@@ -14,7 +15,7 @@ export default function App() {
   const [message, setMessage] = useState('')
   const [articles, setArticles] = useState([])
   const [currentArticleId, setCurrentArticleId] = useState()
-  const [spinnerOn, setSpinnerOn] = useState(false)
+  const [spinnerOn, setSpinnerOn] = useState(false);
 
   // ✨ Research `useNavigate` in React Router v.6
   const navigate = useNavigate()
@@ -37,6 +38,23 @@ export default function App() {
   }
 
   const login = ({ username, password }) => {
+    setSpinnerOn(true);
+    setMessage('');
+    axios
+      .post(loginUrl, {
+        username: username,
+        password: password
+      })
+      .then(res => {
+        console.log(spinnerOn);
+        setMessage(res.data.message);
+        localStorage.setItem('token', res.data.token);
+        redirectToArticles();
+      })
+      .catch(err => console.log(err))
+      .finally(() => setSpinnerOn(false));
+
+
     // ✨ implement
     // We should flush the message state, turn on the spinner
     // and launch a request to the proper endpoint.
@@ -75,7 +93,7 @@ export default function App() {
   return (
     // ✨ fix the JSX: `Spinner`, `Message`, `LoginForm`, `ArticleForm` and `Articles` expect props ❗
     <>
-      <Spinner />
+      <Spinner on={spinnerOn} />
       <Message message={message}/>
       <button id="logout" onClick={logout}>Logout from app</button>
       <div id="wrapper" style={{ opacity: spinnerOn ? "0.25" : "1" }}> {/* <-- do not change this line */}
@@ -85,7 +103,7 @@ export default function App() {
           <NavLink id="articlesScreen" to="/articles">Articles</NavLink>
         </nav>
         <Routes>
-          <Route path="/" element={<LoginForm />} />
+          <Route path="/" element={<LoginForm login={login} />} />
           <Route path="articles" element={
             <>
               <ArticleForm />
