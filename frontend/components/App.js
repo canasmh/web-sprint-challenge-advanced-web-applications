@@ -15,7 +15,7 @@ export default function App() {
   // ✨ MVP can be achieved with these states
   const [message, setMessage] = useState('')
   const [articles, setArticles] = useState([])
-  const [currentArticleId, setCurrentArticleId] = useState()
+  const [currentArticleId, setCurrentArticleId] = useState(null)
   const [spinnerOn, setSpinnerOn] = useState(false);
 
   // ✨ Research `useNavigate` in React Router v.6
@@ -47,7 +47,6 @@ export default function App() {
         password: password
       })
       .then(res => {
-        console.log(spinnerOn);
         setMessage(res.data.message);
         localStorage.setItem('token', res.data.token);
         redirectToArticles();
@@ -126,11 +125,15 @@ export default function App() {
           <Route path="/" element={<LoginForm login={login} />} />
           <Route path="articles" element={
             <>
-              <ArticleForm />
+              <ArticleForm 
+                currentArticle={currentArticleId ? articles.filter(art => art.article_id === currentArticleId)[0] : null}
+                setCurrentArticleId={setCurrentArticleId}
+              />
               <Articles 
                 articles={articles}
                 getArticles={getArticles} 
                 deleteArticle={deleteArticle}
+                setCurrentArticleId={setCurrentArticleId}
                 />
             </>
           } />
