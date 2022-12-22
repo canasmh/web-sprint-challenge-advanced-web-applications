@@ -85,6 +85,17 @@ export default function App() {
   }
 
   const postArticle = article => {
+    setSpinnerOn(true)
+    setMessage('')
+    axiosWithAuth()
+      .post(articlesUrl, article)
+      .then(res => {
+        setArticles([...articles, res.data.article])
+        setMessage(res.data.message)
+      })
+      .catch(err => console.log(err))
+      .finally(() => setSpinnerOn(false));
+
     // ✨ implement
     // The flow is very similar to the `getArticles` function.
     // You'll know what to do! Use log statements or breakpoints
@@ -128,6 +139,8 @@ export default function App() {
               <ArticleForm 
                 currentArticle={currentArticleId ? articles.filter(art => art.article_id === currentArticleId)[0] : null}
                 setCurrentArticleId={setCurrentArticleId}
+                updateArticle={updateArticle}
+                postArticle={postArticle}
               />
               <Articles 
                 articles={articles}
