@@ -103,6 +103,23 @@ export default function App() {
   }
 
   const updateArticle = ({ article_id, article }) => {
+    setSpinnerOn(true)
+    setMessage('')
+    axiosWithAuth()
+      .put(`${articlesUrl}/${article_id}`, article)
+      .then(res => {
+        setMessage(res.data.message)
+        setArticles(articles.map(art => {
+          if (art.article_id === article_id) {
+            return res.data.article
+          } else {
+            return art;
+          }
+        }))
+        setCurrentArticleId(null);
+      })
+      .catch(err => console.log(err.response))
+      .finally(() => setSpinnerOn(false))
     // ✨ implement
     // You got this!
   }

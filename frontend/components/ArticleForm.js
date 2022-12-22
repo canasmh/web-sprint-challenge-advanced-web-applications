@@ -26,12 +26,12 @@ export default function ArticleForm(props) {
     evt.preventDefault()
 
     if (currentArticle) {
-      updateArticle(currentArticle.article_id, values)
+      updateArticle({article_id:currentArticle.article_id, article:values})
     } else {
       postArticle(values)
     }
 
-    setValues(initialFormValues);
+    setValues(initialFormValues); 
     // ✨ implement
     // We must submit a new post or update an existing one,
     // depending on the truthyness of the `currentArticle` prop.
@@ -40,7 +40,7 @@ export default function ArticleForm(props) {
   const isDisabled = () => {
     let condition1 = values.title.trim().length >= 1;
     let condition2 = values.text.trim().length >= 1;
-    let condition3 = values.topic === "Javascript" || values.topic === "React" || values.topic === "Node";
+    let condition3 = values.topic === "JavaScript" || values.topic === "React" || values.topic === "Node";
 
     return !(condition1 && condition2 && condition3)
   }
