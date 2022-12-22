@@ -72,7 +72,7 @@ export default function App() {
         setArticles(res.data.articles)
         setMessage(res.data.message)
       })
-      .catch(err => err.response.status === 401 ? redirectToLogin() : console.log(err))
+      .catch(err => err.response.status === 401 ? redirectToLogin() : console.log(err.response))
       .finally(() => setSpinnerOn(false));
     // ✨ implement
     // We should flush the message state, turn on the spinner
