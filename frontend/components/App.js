@@ -18,10 +18,17 @@ export default function App() {
 
   // ✨ Research `useNavigate` in React Router v.6
   const navigate = useNavigate()
-  const redirectToLogin = () => { /* ✨ implement */ }
-  const redirectToArticles = () => { /* ✨ implement */ }
+  const redirectToLogin = () => { 
+    navigate("/")
+  }
+  const redirectToArticles = () => {
+    navigate("articles")
+  }
 
   const logout = () => {
+    localStorage.removeItem("token");
+    setMessage("Goodbye!");
+    redirectToLogin();
     // ✨ implement
     // If a token is in local storage it should be removed,
     // and a message saying "Goodbye!" should be set in its proper state.
